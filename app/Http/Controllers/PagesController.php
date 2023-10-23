@@ -10,12 +10,9 @@ class PagesController extends Controller
     public function __construct()
     {
     }
-    public function index ()
+    public function home ()
     {
         return Inertia::render('Pages/Home', []);
     }
-    public function login ()
-    {
-        return Inertia::render('Pages/Login', []);
-    }
+    
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PagesController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,7 +16,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::controller(PagesController::class)->group(function () {
-    Route::get('/login', 'login')->name('login');
-    Route::get('/home', 'index')->name('index');
+    Route::get('/', 'home')->name('home');
 });
 
+Route::controller(UserController::class)->group(function () {
+    Route::get('/login', 'login')->name('login');
+    Route::post('/auth', 'auth')->name('auth');
+
+    Route::get('/register', 'register')->name('register');
+    Route::post('/register', 'createUser')->name('createUser');
+});
