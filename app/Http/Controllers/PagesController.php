@@ -13,7 +13,7 @@ class PagesController extends Controller
     }
     public function home()
     {
-        $taskLists = TaskList::all()->toArray();
+        $taskLists = TaskList::with('tasks')->get()->toArray();
         return Inertia::render('Pages/Home', [
             'taskLists' => $taskLists,
         ]);

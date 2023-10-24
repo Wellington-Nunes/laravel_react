@@ -111,3 +111,27 @@ export const ButtonSmall = styled.button`
     border-radius: 4px;
     cursor: pointer;
 `;
+
+export const Container = styled.section`
+width:100% ;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+`;
+
+export const TaskSection = styled.div`
+    border: 1px solid #ccc;
+`;
+
+export const TaskItem = styled.li`
+    padding: 10px;
+    background-color: ${theme.grey2};
+    margin-bottom: 5px;
+    /* display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 20px;
+    div {
+        width: 15%;
+    } */
+`;

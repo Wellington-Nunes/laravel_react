@@ -10,7 +10,7 @@ import * as S from './style';
 
 export default function Home({ taskLists }) {
     const [values, setValues] = useState({ name: '' });
-
+    console.log(taskLists);
     function handleChange(e) {
         e.preventDefault();
         const key = e.target.id;
@@ -36,6 +36,9 @@ export default function Home({ taskLists }) {
         e.preventDefault();
         if (selectedList) {
             router.post(route("task.store", { list: selectedList }), values);
+            setSelectedList(null);
+            setShowPopupTask(false);
+
         } else {
             console.error("No task list selected");
         }
@@ -44,10 +47,10 @@ export default function Home({ taskLists }) {
 
     const [showPopupList, setShowPopupList] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
-    const [selectedTaskLit, setSelectedTaskLit] = useState(null);
+    const [selectedTaskList, setSelectedTaskList] = useState(null);
 
     const handleTaskLitsClick = (taskLit) => {
-        setSelectedTaskLit(taskLit);
+        setSelectedTaskList(taskLit);
         setShowPopup(true);
     };
 
@@ -59,8 +62,8 @@ export default function Home({ taskLists }) {
     const [showPopupTask, setShowPopupTask] = useState(false);
     const [selectedList, setSelectedList] = useState(null);
     const handleNewTask = (taskListId) => {
-        setShowPopupTask(true);
         setSelectedList(taskListId);
+        setShowPopupTask(true);
     };
 
     return (
@@ -121,17 +124,43 @@ export default function Home({ taskLists }) {
             </PopupOverlay>
 
             <PopupOverlay show={showPopup}>
-                {selectedTaskLit && (
+                {selectedTaskList && (
                     <PopupContainer width="800px">
                         <PopupCloseButton onClick={() => setShowPopup(false)}>
                             <i className="fa-solid fa-times"></i>
                         </PopupCloseButton>
 
                         <div>
-                            <PopupHeader>{selectedTaskLit.name}</PopupHeader>
-                            <S.ButtonMain onClick={() => handleNewTask(selectedTaskLit.id)}>CRIAR TAREFA<i className="fa-solid fa-plus"></i></S.ButtonMain>
+                            <PopupHeader>{selectedTaskList.name}</PopupHeader>
+                            <S.ButtonMain onClick={() => handleNewTask(selectedTaskList.id)}>CRIAR TAREFA<i className="fa-solid fa-plus"></i></S.ButtonMain>
                         </div>
+                        {selectedTaskList && selectedTaskList.tasks.length > 0 ? (
+                            <S.Container>
+                                <S.TaskSection>
+                                    <S.Title>Fechado</S.Title>
+                                    {selectedTaskList && selectedTaskList.tasks.filter(task => task.status === 100).map((task) => (
+                                        <S.TaskItem key={task.id}>{task.name}</S.TaskItem>
+                                    ))}
+                                </S.TaskSection>
 
+                                <S.TaskSection>
+                                    <S.Title>Em progresso</S.Title>
+                                    {selectedTaskList && selectedTaskList.tasks.filter(task => task.status === 200).map((task) => (
+                                        <S.TaskItem key={task.id}>{task.name}</S.TaskItem>
+                                    ))}
+                                </S.TaskSection>
+
+                                <S.TaskSection>
+                                    <S.Title>Concluído</S.Title>
+                                    {selectedTaskList && selectedTaskList.tasks.filter(task => task.status === 300).map((task) => (
+                                        <S.TaskItem key={task.id}>{task.name}</S.TaskItem>
+                                    ))}
+                                </S.TaskSection>
+                            </S.Container>
+
+                        ) : (
+                            <p>Nenhuma task disponível.</p>
+                        )}
                     </PopupContainer>
                 )}
             </PopupOverlay>
